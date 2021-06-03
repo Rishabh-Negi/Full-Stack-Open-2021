@@ -6,9 +6,7 @@ const Button = ({ onPress, text }) => {
 
 const Title = ({ text }) => {
   return (
-    <h1>
-      {text}
-    </h1>
+    <h1>{text}</h1>
   )
 }
 
@@ -20,22 +18,26 @@ const Statistics = ({ good, neutral, bad }) => {
 
   if (good === 0 && neutral === 0 && bad === 0)
     return (
-      <div>
-        No feedback given
-      </div>
+      <div>No feedback given</div>
     )
 
   return (
     <div>
-      <div>good {good}</div>
-      <div>neutral {neutral}</div>
-      <div>bad {bad}</div>
-      <div>all {all}</div>
-      <div>average {avg}</div>
-      <div>positive {pos} %</div>
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value={neutral} />
+      <Statistic text="bad" value={bad} />
+      <Statistic text="all" value={all} />
+      <Statistic text="average" value={avg} />
+      <Statistic text="positive" value={pos + " %"} />
     </div>
   )
 
+}
+
+const Statistic = ({ text, value }) => {
+  return (
+    <div>{text} {value}</div>
+  )
 }
 
 const App = () => {
