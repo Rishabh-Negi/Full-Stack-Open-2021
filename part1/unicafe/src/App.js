@@ -18,6 +18,13 @@ const Statistics = ({ good, neutral, bad }) => {
   var avg = (good - bad) / all;
   var pos = (good * 100) / all;
 
+  if (good === 0 && neutral === 0 && bad === 0)
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+
   return (
     <div>
       <div>good {good}</div>
