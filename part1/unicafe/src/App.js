@@ -23,12 +23,16 @@ const Statistics = ({ good, neutral, bad }) => {
 
   return (
     <div>
-      <Statistic text="good" value={good} />
-      <Statistic text="neutral" value={neutral} />
-      <Statistic text="bad" value={bad} />
-      <Statistic text="all" value={all} />
-      <Statistic text="average" value={avg} />
-      <Statistic text="positive" value={pos + " %"} />
+      <table>
+        <tbody>
+          <Statistic text="good" value={good} />
+          <Statistic text="neutral" value={neutral} />
+          <Statistic text="bad" value={bad} />
+          <Statistic text="all" value={all} />
+          <Statistic text="average" value={avg.toFixed(1)} />
+          <Statistic text="positive" value={pos.toFixed(1) + " %"} />
+        </tbody>
+      </table>
     </div>
   )
 
@@ -36,7 +40,10 @@ const Statistics = ({ good, neutral, bad }) => {
 
 const Statistic = ({ text, value }) => {
   return (
-    <div>{text} {value}</div>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
