@@ -12,7 +12,7 @@ const Title = ({ text }) => {
   )
 }
 
-const Stats = ({ good, neutral, bad }) => {
+const Statistics = ({ good, neutral, bad }) => {
 
   var all = good + neutral + bad;
   var avg = (good - bad) / all;
@@ -44,7 +44,7 @@ const App = () => {
       <Button onPress={() => setNeutral(neutral + 1)} text="neutral" />
       <Button onPress={() => setBad(bad + 1)} text="bad" />
       <Title text="statistics" />
-      <Stats good={good} neutral={neutral} bad={bad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
