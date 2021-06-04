@@ -1,7 +1,24 @@
 import React, { useState } from 'react'
 
 const Button = ({ onTap, text }) => <button onClick={onTap}>{text}</button>
+const Heading = ({ title }) => <h2>{title}</h2>
 
+const Top = ({ votes, list }) => {
+  var ar = votes
+  var max = 0, index = 0
+  for (var i = 0; i < ar.length; i++) {
+    if (ar[i] > max) {
+      max = ar[i]
+      index = i
+    }
+  }
+  return (
+    <div>
+      <div>{list[index]}</div>
+      <div>has {votes[index]} votes</div>
+    </div>
+  )
+}
 
 const App = () => {
   const anecdotes = [
@@ -28,12 +45,16 @@ const App = () => {
 
   return (
     <div>
+      <Heading title="Anecdote of the day" />
       {anecdotes[selected]}
       <div>has {votes[selected]} votes</div>
       <div>
         <Button onTap={vote} text="vote" />
         <Button onTap={next} text="next anecdote" />
       </div>
+
+      <Heading title="Anecdote with most votes" />
+      <Top votes={votes} list={anecdotes} />
     </div>
   )
 }
