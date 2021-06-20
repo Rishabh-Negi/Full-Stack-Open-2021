@@ -1,10 +1,7 @@
 import React from 'react'
 
 const Content = ({ parts }) => {
-  let count = 0;
-  parts.forEach(element => {
-    count += element.exercises;
-  });
+  let count = parts.reduce((s, e) => s + e.exercises, 0);
   return (
     <div>
       {
