@@ -1,10 +1,16 @@
 import React from 'react'
 
 const Content = ({ parts }) => {
+  let count = 0;
+  parts.forEach(element => {
+    count += element.exercises;
+  });
   return (
     <div>
-      {parts.map((e) => <p key={e['id']} > {e['name']} {e['exercises']}</p>)
+      {
+        parts.map((e) => <p key={e['id']} > {e['name']} {e['exercises']}</p>)
       }
+      <h4>total of {count} exercises</h4>
     </div >
   )
 }
