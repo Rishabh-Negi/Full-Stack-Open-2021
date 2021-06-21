@@ -16,10 +16,22 @@ const App = () => {
     event.preventDefault();
     console.log(event.target);
 
+    var exists = false;
+    persons.forEach(function (e) {
+      if (e['name'] === newName) {
+        exists = true
+      }
+    })
+
+
     const newContact = {
       name: newName,
     }
-    setPersons(persons.concat(newContact))
+    if (!exists) {
+      setPersons(persons.concat(newContact))
+    } else {
+      alert(newName + ' is already added to phonebook')
+    }
     setNewName('')
   }
 
