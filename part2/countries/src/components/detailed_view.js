@@ -4,14 +4,14 @@ import { useState, useEffect } from "react"
 const Details = ({ data }) => {
 
 
-    const [weather, setWeather] = useState(0)
+    const [weather, setWeather] = useState({})
     const fetchWeather = () => {
         axios.get('http://api.weatherstack.com/current?access_key=' + process.env.REACT_APP_API_KEY + '&query=' + data["name"]).then((Response) => {
             setWeather(Response.data["current"])
-            // console.log(Response.data)
-            // console.log(Response.data["current"])
+            console.log(Response.data["current"])
         })
     }
+    // eslint-disable-next-line
     useEffect(fetchWeather, [])
 
     return (
