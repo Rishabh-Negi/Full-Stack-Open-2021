@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import Details from './detailed_view'
+import CountryList from './country_list'
 
 const Search = ({ data }) => {
 
@@ -8,8 +10,17 @@ const Search = ({ data }) => {
     const onChange = (event) => {
         setTerm(event.target.value.toLowerCase())
         // console.log(event.target.value.toLowerCase())
-        const s = event.target.value.toLowerCase();
-        if (event.target.value !== '') {
+        filter(event.target.value)
+    }
+
+    const onCLick = (event) => {
+        console.log(event.target.id)
+        filter(event.target.id)
+    }
+
+    function filter(text) {
+        const s = text.toLowerCase();
+        if (text !== '') {
             var list = []
             data.forEach((e) => {
                 if (e["name"].toLowerCase().includes(s)) {
@@ -29,29 +40,12 @@ const Search = ({ data }) => {
             </div>
             {
                 filterData.length === 1 ?
-                    <div>
-                        <div>
-                            <h1>{filterData[0]["name"]}</h1>
-                            <div>capital {filterData[0]["capital"]}</div>
-                            <div>population {filterData[0]["population"]}</div>
-                        </div>
-
-                        <div>
-                            <h3>languages</h3>
-                            <ul>
-                                {filterData[0]["languages"].map((e) => <li key={e["iso639_1"]}>{e["name"]}</li>)}
-                            </ul>
-                        </div>
-                        <div>
-                            <img src={filterData[0]["flag"]} alt="flag" width="100px" />
-                        </div>
-                    </div>
+                    <Details data={filterData[0]} />
                     : filterData.length <= 10 ?
-                        filterData.map(
-                            (e, i) => <div key={e.name + i}>{e.name} {e.number}</div>
-                        ) :
+                        <CountryList filterData={filterData} onClick={(event) => onCLick(event)} />
+                        :
                         <div>
-                            Too many matches,specify another filter
+                            Too many matches, specify another filter
                         </div>
             }
         </div>
