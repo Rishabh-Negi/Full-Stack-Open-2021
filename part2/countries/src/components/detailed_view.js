@@ -1,5 +1,19 @@
+import axios from "axios"
+import { useState, useEffect } from "react"
 
 const Details = ({ data }) => {
+
+
+    const [weather, setWeather] = useState(0)
+    const fetchWeather = () => {
+        axios.get('http://api.weatherstack.com/current?access_key=' + process.env.REACT_APP_API_KEY + '&query=' + data["name"]).then((Response) => {
+            setWeather(Response.data["current"])
+            // console.log(Response.data)
+            // console.log(Response.data["current"])
+        })
+    }
+    useEffect(fetchWeather, [])
+
     return (
         <div>
             <div>
@@ -16,6 +30,14 @@ const Details = ({ data }) => {
             </div>
             <div>
                 <img src={data["flag"]} alt="flag" width="100px" />
+            </div>
+            <div>
+                <h3>Weather in {data["name"]}</h3>
+                <div>
+                    <p><b>temperature: </b>{weather["temperature"]} Celcius</p>
+                    <img src={weather["weather_icons"]} alt="weather-icon" />
+                    <p><b>wind: </b>{weather["wind_speed"]} mph directions {weather["wind_dir"]}</p>
+                </div>
             </div>
         </div>
     )

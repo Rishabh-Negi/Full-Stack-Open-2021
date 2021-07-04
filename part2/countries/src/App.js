@@ -8,7 +8,7 @@ function App() {
 
 
   const fetchData = () => {
-    console.log('api call')
+    // console.log('api call')
     axios.get('https://restcountries.eu/rest/v2/all').then((response) => {
       // console.log(response.data)
       setData(response.data)
