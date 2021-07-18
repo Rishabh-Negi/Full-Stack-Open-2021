@@ -2,25 +2,21 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/filter'
 import PersonForm from './components/form'
 import Persons from './components/person'
-import axios from 'axios'
-
+import service from './service/persons'
 
 
 const App = () => {
   const [persons, setPersons] = useState([])
 
   const hooks = () => {
-    console.log('api call')
-    axios.get('http://localhost:3001/persons').then((response) => {
-      console.log(response.data)
-      setPersons(response.data)
-    })
+    service.getAll()
+      .then((response) => {
+        console.log(response)
+        setPersons(response)
+      })
+      .catch(error => console.log(error))
   }
   useEffect(hooks, [])
-
-  const addContact = data => {
-    console.log(data)
-  }
 
   return (
     <div>
