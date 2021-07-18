@@ -18,6 +18,10 @@ const App = () => {
   }
   useEffect(hooks, [])
 
+  const addContact = data => {
+    console.log(data)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>

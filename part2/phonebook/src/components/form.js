@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 const PersonForm = ({ persons, setPersons }) => {
 
@@ -18,7 +19,7 @@ const PersonForm = ({ persons, setPersons }) => {
         event.preventDefault()
         var exists = false;
         persons.forEach(function (e) {
-            if (e['name'] === newName) {
+            if (e['name'].toLowerCase() === newName.toLowerCase()) {
                 exists = true
             }
         })
@@ -28,13 +29,16 @@ const PersonForm = ({ persons, setPersons }) => {
                 name: newName,
                 number: newNumber
             }
-            setPersons(persons.concat(newContact))
+            axios.post('http://localhost:3001/persons', newContact).then(
+                response =>
+                    setPersons(persons.concat(response.data))
+            )
+            console.log(persons[persons.length - 1])
         } else {
             alert(newName + ' is already added to phonebook')
         }
         setNewName('')
         setNewNumber('')
-        console.log(persons[persons.length - 1])
     }
 
     return (
