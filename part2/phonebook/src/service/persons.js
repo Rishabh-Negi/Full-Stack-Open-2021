@@ -9,7 +9,7 @@ const getAll = () => {
 
 const addContact = newContact => {
     const req = axios.post(baseUrl, newContact)
-    return req
+    return req.then(response => response.data)
 }
 
 const removeContact = id => {
@@ -19,8 +19,14 @@ const removeContact = id => {
 
 }
 
+const update = (id, newObj) => {
+    const req = axios.put(`${baseUrl}/${id}`, newObj)
+    return req.then(response => response.data)
+}
+
 const service = {
     getAll,
+    update,
     addContact,
     removeContact
 }

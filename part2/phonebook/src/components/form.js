@@ -17,10 +17,12 @@ const PersonForm = ({ persons, setPersons }) => {
 
     const addNumber = (event) => {
         event.preventDefault()
-        var exists = false;
+        var exists = false
+        var p
         persons.forEach(function (e) {
             if (e['name'].toLowerCase() === newName.toLowerCase()) {
                 exists = true
+                p = e
             }
         })
 
@@ -30,11 +32,24 @@ const PersonForm = ({ persons, setPersons }) => {
                 number: newNumber
             }
             service.addContact(newContact)
-                .then(response =>
+                .then(response => {
+                    console.log(response)
                     setPersons(persons.concat(response))
+                }
                 )
         } else {
-            alert(newName + ' is already added to phonebook')
+            if (window.confirm(newName + ' is already added to phonebook , replace the old number with a new one?')) {
+                const newContact = {
+                    name: p['name'],
+                    number: newNumber
+                }
+                // console.log(newContact)
+                service.update(p.id, newContact)
+                    .then(response => {
+                        setPersons(persons.map(e => e.id !== response.id ? e : response))
+                    })
+                    .catch(error => console.log(error))
+            }
         }
         setNewName('')
         setNewNumber('')
