@@ -1,8 +1,8 @@
-const Message = ({ message }) => {
-    if (message === null || message === '')
+const Message = ({ error }) => {
+    if (error.message === null)
         return null
     const footerStyle = {
-        color: 'green',
+        color: error.color,
         background: 'lightgrey',
         fontSize: 20,
         borderStyle: 'solid',
@@ -14,7 +14,7 @@ const Message = ({ message }) => {
 
     return (
         <div style={footerStyle} >
-            {message}
+            {error.message}
         </div >
     )
 }

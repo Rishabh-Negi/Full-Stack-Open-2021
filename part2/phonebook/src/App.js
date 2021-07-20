@@ -8,7 +8,7 @@ import Message from './components/message'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [message, setMessage] = useState('')
+  const [error, setError] = useState({ message: null, color: 'red' })
 
   const hooks = () => {
     service.getAll()
@@ -16,23 +16,31 @@ const App = () => {
         console.log(response)
         setPersons(response)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        console.log('error', error)
+        setError({
+          message: 'some error happened...', color: 'red'
+        })
+        setTimeout(() => {
+          setError({ message: null, color: 'green' })
+        }, 2000)
+      })
   }
   useEffect(hooks, [])
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message message={message} />
+      <Message error={error} />
       <Filter persons={persons} />
 
       <h3>Add a new</h3>
 
-      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} />
+      <PersonForm persons={persons} setPersons={setPersons} setError={setError} />
 
       <h3>Numbers</h3>
 
-      <Persons persons={persons} setPersons={setPersons} />
+      <Persons persons={persons} setPersons={setPersons} setError={setError} />
     </div>
   )
 }

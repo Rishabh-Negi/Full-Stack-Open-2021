@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import service from '../service/persons'
 
-const PersonForm = ({ persons, setPersons, setMessage }) => {
+const PersonForm = ({ persons, setPersons, setError }) => {
 
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
@@ -25,7 +25,6 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
                 p = e
             }
         })
-
         if (!exists) {
             const newContact = {
                 name: newName,
@@ -35,12 +34,17 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
                 .then(response => {
                     console.log(response)
                     setPersons(persons.concat(response))
-                    setMessage(`Added ${newName}`)
+                    setError({ message: `Added ${newName}`, color: 'green' })
                     setTimeout(() => {
-                        setMessage(null)
+                        setError({ message: null, color: 'green' })
                     }, 2000)
                 }
-                )
+                ).catch(e => {
+                    setError(`Error: Not Added`)
+                    setTimeout(() => {
+                        setError({ message: null, color: 'red' })
+                    }, 2000)
+                })
         } else {
             if (window.confirm(newName + ' is already added to phonebook , replace the old number with a new one?')) {
                 const newContact = {
@@ -51,12 +55,18 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
                 service.update(p.id, newContact)
                     .then(response => {
                         setPersons(persons.map(e => e.id !== response.id ? e : response))
-                        setMessage(`Updated ${newName}`)
+                        setError({ message: `Updated ${newName}`, color: 'green' })
                         setTimeout(() => {
-                            setMessage(null)
+                            setError({ message: null, color: 'green' })
                         }, 2000)
                     })
-                    .catch(error => console.log(error))
+                    .catch(error => {
+                        console.log('error', error)
+                        setError({ message: `Information of ${newName} has already been removed from server`, color: 'red' })
+                        setTimeout(() => {
+                            setError({ message: null, color: 'green' })
+                        }, 2000)
+                    })
             }
         }
         setNewName('')
