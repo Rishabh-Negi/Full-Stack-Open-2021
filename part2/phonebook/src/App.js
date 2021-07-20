@@ -3,10 +3,12 @@ import Filter from './components/filter'
 import PersonForm from './components/form'
 import Persons from './components/person'
 import service from './service/persons'
+import Message from './components/message'
 
 
 const App = () => {
   const [persons, setPersons] = useState([])
+  const [message, setMessage] = useState('')
 
   const hooks = () => {
     service.getAll()
@@ -21,12 +23,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Message message={message} />
       <Filter persons={persons} />
 
       <h3>Add a new</h3>
 
-      <PersonForm persons={persons} setPersons={setPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} />
 
       <h3>Numbers</h3>
 
