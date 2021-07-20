@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import service from '../service/persons'
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setError }) => {
 
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
@@ -16,25 +17,60 @@ const PersonForm = ({ persons, setPersons }) => {
 
     const addNumber = (event) => {
         event.preventDefault()
-        var exists = false;
+        var exists = false
+        var p
         persons.forEach(function (e) {
-            if (e['name'] === newName) {
+            if (e['name'].toLowerCase() === newName.toLowerCase()) {
                 exists = true
+                p = e
             }
         })
-
         if (!exists) {
             const newContact = {
                 name: newName,
                 number: newNumber
             }
-            setPersons(persons.concat(newContact))
+            service.addContact(newContact)
+                .then(response => {
+                    console.log(response)
+                    setPersons(persons.concat(response))
+                    setError({ message: `Added ${newName}`, color: 'green' })
+                    setTimeout(() => {
+                        setError({ message: null, color: 'green' })
+                    }, 2000)
+                }
+                ).catch(e => {
+                    setError(`Error: Not Added`)
+                    setTimeout(() => {
+                        setError({ message: null, color: 'red' })
+                    }, 2000)
+                })
         } else {
-            alert(newName + ' is already added to phonebook')
+            if (window.confirm(newName + ' is already added to phonebook , replace the old number with a new one?')) {
+                const newContact = {
+                    name: p['name'],
+                    number: newNumber
+                }
+                // console.log(newContact)
+                service.update(p.id, newContact)
+                    .then(response => {
+                        setPersons(persons.map(e => e.id !== response.id ? e : response))
+                        setError({ message: `Updated ${newName}`, color: 'green' })
+                        setTimeout(() => {
+                            setError({ message: null, color: 'green' })
+                        }, 2000)
+                    })
+                    .catch(error => {
+                        console.log('error', error)
+                        setError({ message: `Information of ${newName} has already been removed from server`, color: 'red' })
+                        setTimeout(() => {
+                            setError({ message: null, color: 'green' })
+                        }, 2000)
+                    })
+            }
         }
         setNewName('')
         setNewNumber('')
-        console.log(persons[persons.length - 1])
     }
 
     return (
