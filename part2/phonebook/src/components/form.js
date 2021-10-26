@@ -39,10 +39,10 @@ const PersonForm = ({ persons, setPersons, setError }) => {
                         setError({ message: null, color: 'green' })
                     }, 2000)
                 }
-                ).catch(e => {
-                    setError(`Error: Not Added`)
+                ).catch(error => {
+                    setError({ message: error.response.data.error, color: 'red' })
                     setTimeout(() => {
-                        setError({ message: null, color: 'red' })
+                        setError({ message: null, color: 'green' })
                     }, 2000)
                 })
         } else {
