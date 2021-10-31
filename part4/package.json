@@ -6,13 +6,14 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "cd node_modules/.bin && eslint .",
+    "test": "jest --verbose"
   },
   "author": "Rishabh Negi",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^8.1.0",
+    "jest": "^27.3.1",
     "nodemon": "^2.0.14"
   },
   "dependencies": {
