@@ -14,7 +14,7 @@ beforeEach(async () => {
     await Promise.all(promiseArray)
 }, 100000)
 
-describe('get all blogs', () => {
+describe('When there is intially some blogs saved', () => {
 
     test('blogs are returned as json', async () => {
         await api
@@ -40,7 +40,7 @@ describe('get all blogs', () => {
 })
 
 
-describe('post req', () => {
+describe('addition of new blog', () => {
 
     test('a valid blog can be added', async () => {
         const newBlog = {
@@ -73,9 +73,6 @@ describe('post req', () => {
 
         expect(response.body.likes).toBe(0)
     })
-})
-
-describe('Invalid post req', () => {
 
     test('fails with status 400 if title is missing', async () => {
         const response = await api.post('/api/blogs')
@@ -92,6 +89,23 @@ describe('Invalid post req', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
 
+    })
+})
+
+describe('deletion of a blog', () => {
+    test('succeeds with status code 204 if id is valid', async () => {
+        const blogs = await helper.BlogsInDb()
+        const blogToDelete = blogs[0]
+
+        await api.delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+        const blogsAtEnd = await helper.BlogsInDb()
+
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+        const contents = blogsAtEnd.map(r => r.title)
+
+        expect(contents).not.toContain(blogToDelete.title)
     })
 })
 
