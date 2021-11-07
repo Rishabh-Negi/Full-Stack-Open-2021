@@ -92,21 +92,78 @@ describe('addition of new blog', () => {
     })
 })
 
-describe('deletion of a blog', () => {
+describe('deletion of a specific blog', () => {
     test('succeeds with status code 204 if id is valid', async () => {
         const blogs = await helper.BlogsInDb()
         const blogToDelete = blogs[0]
 
         await api.delete(`/api/blogs/${blogToDelete.id}`)
             .expect(204)
-        const blogsAtEnd = await helper.BlogsInDb()
 
+        const blogsAtEnd = await helper.BlogsInDb()
         expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
         const contents = blogsAtEnd.map(r => r.title)
-
         expect(contents).not.toContain(blogToDelete.title)
     })
+    
+    test('fail with status code 400 if id is invalid', async () => {
+        const blogs = await helper.BlogsInDb()
+        const blogToDelete = blogs[0]
+
+        await api.delete('/api/blogs/123')
+            .expect(400)
+    })
+
+    test("fail with status code 404 if blog doesn't exist", async () => {
+        const blogs = await helper.BlogsInDb()
+        const blogToDelete = blogs[0]
+        const id = await helper.nonExistingId
+
+        await api.delete(`/api/blogs/${id}`)
+            .expect(404)
+    })
+})
+
+describe('update a specific blog', () => {
+    test('succeeds with status code 200 if id is valid', async () => {
+        const blogs = await helper.BlogsInDb()
+        const blogToUpdate = blogs[0]
+        const updatedBlog = { ...blogToUpdate, likes: 10 }
+
+        await api.put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updatedBlog)
+            .expect(200)
+
+        const blogsAtEnd = await helper.BlogsInDb()
+        expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+        const data = blogsAtEnd.find(b => b.id === blogToUpdate.id)
+        expect(data.likes).toBe(10)
+    })
+
+    test('fail with status code 400 if id is invalid', async () => {
+        const blogs = await helper.BlogsInDb()
+        const blogToUpdate = blogs[0]
+        const updatedBlog = { ...blogToUpdate, likes: 10 }
+
+        await api.put('/api/blogs/123')
+            .send(updatedBlog)
+            .expect(400)
+    })
+
+    test("fail with status code 404 if blog doesn't exist", async () => {
+        const blogs = await helper.BlogsInDb()
+        const blogToUpdate = blogs[0]
+        const updatedBlog = { ...blogToUpdate, likes: 10 }
+
+        const id = await helper.nonExistingId()
+
+        await api.put(`/api/blogs/${id}`)
+            .send(updatedBlog)
+            .expect(404)
+    })
+
 })
 
 afterAll(() => {

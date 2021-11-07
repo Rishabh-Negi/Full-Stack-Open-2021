@@ -52,11 +52,16 @@ const initialBlogs = [
 ]
 
 const nonExistingId = async () => {
-    const blog = new Blog({ content: 'willremovethissoon', date: new Date() })
+    const blog = new Blog({
+        title: "React",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        likes: 11,
+    })
     await blog.save()
     await blog.remove()
 
-    return Blog._id.toString()
+    return blog._id.toString()
 }
 
 const BlogsInDb = async () => {
