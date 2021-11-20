@@ -1,0 +1,11 @@
+PUT http://localhost:3001/api/blogs/617dc8535b1e69d690e40f68
+Content-Type: application/json
+
+{
+    "title": "Mah Life" ,
+    "author": "Rishabh Negi",
+    "url": "www.google.com",
+    "likes": 2
+}
+
+# GET http://localhost:3001/api/blogs
